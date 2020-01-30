@@ -9,13 +9,6 @@ package oosd;
  *
  * @author Lucas
  */
-public class OOSD {
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        // TODO code application logic here
-    }
+public class Lease {
     
 }

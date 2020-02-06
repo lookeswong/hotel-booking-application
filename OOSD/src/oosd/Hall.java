@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package oosd;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,6 +15,7 @@ public class Hall {
     private String hallAddress;
     private String phoneNo;
     private String hallName;
+    ArrayList<Room> rooms = new ArrayList<>();
     
     public Hall() {
         hallNo = 0;
@@ -23,12 +25,17 @@ public class Hall {
         
     }
     
-    public Hall(int hallNo, String hallAddress, String phoneNo, String hallName) {
+    public Hall(ArrayList rooms, int hallNo, String hallAddress, String phoneNo, String hallName) {
+        this.rooms = rooms;
         this.hallNo = hallNo;
         this.hallAddress = hallAddress;
         this.phoneNo = phoneNo;
         this.hallName = hallName;
         
+    }
+    
+    public void addRoom() {
+       
     }
     
     public int getHallNo() {
@@ -63,4 +70,5 @@ public class Hall {
     public void setHallName(String hallName) {
         this.hallName = hallName;
     }
+
 }

@@ -34,7 +34,11 @@ public class Hall {
         
     }
     
-    public void addRoom() {
+    public ArrayList<Room> getRoom() {
+        return rooms; // am not sure is this correct or not, check with joe
+    }
+    
+    public void addRoom(int roomNo, Lease lease, int cleanStatus, double rent, String description) {
        
     }
     

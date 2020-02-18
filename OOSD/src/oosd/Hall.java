@@ -38,8 +38,18 @@ public class Hall {
         return rooms; // am not sure is this correct or not, check with joe
     }
     
-    public void addRoom(int roomNo, Lease lease, int cleanStatus, double rent, String description) {
-       
+    public Room getRoom(int roomNo) {
+        Room returnedRoom = null;
+        for (int i=0; i<rooms.size(); i++) {
+            if(rooms.get(i).getRoomNo() == roomNo) {
+                returnedRoom = rooms.get(i);
+            }
+        }
+        return returnedRoom;
+    }
+    
+    public void addRoom(Room room) {
+       rooms.add(room);
     }
     
     public int getHallNo() {

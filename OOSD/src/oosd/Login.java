@@ -14,7 +14,7 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    private UweAccommodationSystem main = UweAccommodationSystem.getInstance();
+    private UweAccommodationSystem accommodationSystem = UweAccommodationSystem.getInstance();
 
     public Login() {
         initComponents();
@@ -150,24 +150,14 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
-//            System.out.println(txtUsername.getText());
-//            if (txtUsername.getText() == "WARDEN"){
-//                main.setPermissions(0);
-//                System.out.println(main.getPermissions());
-//                
-//            }
-        if ("WARDEN".equals(txtUsername.getText().toUpperCase())) {
-            if ("123".equals(txtPassword.getText())) {
-                setVisible(false);
-                ManagementSystem ms = new ManagementSystem();
-                ms.setVisible(true);
-            } else {
-                System.out.println("Password invalid");
-            }
-        } else {
-            System.out.println("Username invalid");
+        try {
+            accommodationSystem.checkLogin(txtUsername.getText(), txtPassword.getText());
+            ManagementSystem managementSystem = new ManagementSystem();
+            managementSystem.setVisible(true);
+            setVisible(false);
+        } catch (InvalidLoginException error) {
+            System.out.println("Invalid Login Exception Caught " + error);
         }
-
     }//GEN-LAST:event_btnLoginActionPerformed
 
     /**

@@ -22,7 +22,6 @@ public class Hall {
         hallAddress = "";
         phoneNo = "";
         hallName = "";
-        
     }
     
     public Hall(ArrayList rooms, int hallNo, String hallAddress, String phoneNo, String hallName) {
@@ -31,11 +30,10 @@ public class Hall {
         this.hallAddress = hallAddress;
         this.phoneNo = phoneNo;
         this.hallName = hallName;
-        
     }
     
-    public ArrayList<Room> getRoom() {
-        return rooms; // am not sure is this correct or not, check with joe
+    public ArrayList<Room> getRooms() {
+        return rooms;
     }
     
     public Room getRoom(int roomNo) {

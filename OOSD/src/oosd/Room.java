@@ -12,7 +12,7 @@ package oosd;
 public class Room {
     private int roomNo;
     private Lease lease;
-    private int cleanStatus;
+    private int cleanStatus; // Clean = 0, Dirty = 1, Offline = 2
     private double rent;
     private String description;
     

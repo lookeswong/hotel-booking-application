@@ -13,9 +13,11 @@ import java.awt.TextField;
 import javafx.application.Application;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -41,6 +43,33 @@ public class TestManagementSystem extends Application {
 
         final Label label = new Label("UWE Accomodation System");
         label.setFont(new Font("Arial", 20));
+        
+        Label lblLeaseNo = new Label("Lease Number");
+        TextField txtLeaseNo = new TextField();
+        
+        Label lblHallName = new Label("Hall Name");
+        TextField txtHallName = new TextField();
+        
+        Label lblHallNo = new Label("Hall Number");
+        TextField txtHallNo = new TextField();
+        
+        Label lblRoomNo = new Label("Room Number");
+        TextField txtRoomNo = new TextField();
+        
+        Label lblStudentID = new Label("Student ID");
+        TextField txtStudentID = new TextField();
+        
+        Label lblStudentName = new Label("Student Name");
+        TextField txtStudentName = new TextField();
+        
+        Label lblLeaseStart = new Label("Lease Start Date");
+        TextField txtLeaseStart = new TextField();
+        
+        Label lblOccupancyStatus = new Label("Occupancy Status");
+        ChoiceBox cbOccupancyStatus = new ChoiceBox(FXCollections.observableArrayList("Occupied", "Unoccupied"));
+        
+        Label lblCleaningStatus = new Label("Cleaning Status");
+        ChoiceBox cbCleaningStatus = new ChoiceBox(FXCollections.observableArrayList("Clean", "Dirty", "Offline"));
 
         table.setEditable(true);
 
@@ -61,7 +90,7 @@ public class TestManagementSystem extends Application {
         final VBox vbox = new VBox();
         vbox.setSpacing(5);
         vbox.setPadding(new Insets(10, 0, 0, 10));
-        vbox.getChildren().addAll(label, table);
+        vbox.getChildren().addAll(label, table, lblLeaseNo, lblHallName, lblHallNo, lblRoomNo, lblStudentID, lblStudentName, lblLeaseStart, lblOccupancyStatus, lblCleaningStatus);
 
         ((Group) scene.getRoot()).getChildren().addAll(vbox);
 

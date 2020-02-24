@@ -51,9 +51,10 @@ public class UweAccommodationSystem {
         //Create Test Students
         // Create Test Students
         Student studentA = new Student("Jason", 0);
-        Student studentB = new Student("Barney", 1);
+        Student studentB = new Student("Kun Wei", 1);
         Student studentC = new Student("Elise", 2);
         Student studentD = new Student("Emily", 3);
+        Student studentE = new Student("James", 3);
 
         // Create Start Dates
         String dateA = "January 1st 2020"; 
@@ -64,6 +65,7 @@ public class UweAccommodationSystem {
         Lease leaseB = new Lease(dateB, 1, studentB);
         Lease leaseC = new Lease(dateA, 2, studentC);
         Lease leaseD = new Lease(dateA, 3, studentD);
+        Lease leaseE = new Lease(dateA, 3, studentE);
 
         // Create new Rooms
         Room roomA = new Room(0, leaseA, 0, 99.99, "");
@@ -71,6 +73,7 @@ public class UweAccommodationSystem {
         Room roomC = new Room(2, leaseC, 0, 99.99, "");
         Room roomD = new Room(3, leaseD, 0, 99.99, "");
         Room roomE = new Room(4, null, 0, 99.99, ""); // Empty Room
+        Room roomF = new Room(5, leaseE, 0, 99.99, "");
 
         // Create New Halls
         ArrayList<Room> hallARooms = new ArrayList<>();
@@ -82,6 +85,7 @@ public class UweAccommodationSystem {
 
         hallBRooms.add(roomD);
         hallBRooms.add(roomE);
+        hallBRooms.add(roomF);
 
         Hall hallA = new Hall(hallARooms, 0, "", "", "Hall A");
         halls.add(hallA);
@@ -125,7 +129,7 @@ public class UweAccommodationSystem {
                     studentID = String.valueOf(halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // set student ID
                     studentName = halls.get(i).getRooms().get(j).getLease().getStudent().getName(); // set student name
                     leaseStart = String.valueOf(halls.get(i).getRooms().get(j).getLease().getStartDate()); // set lease start
-                    occupancyStatus = "Occupied";// set occupancy status (automatically set to null if lease is expired)
+                    occupancyStatus = "Occupied";// set occupancy status
                 } else {
                     occupancyStatus = "Unoccupied";
                     leaseNo = "";
@@ -133,9 +137,9 @@ public class UweAccommodationSystem {
                     studentName = "";
                     leaseStart = "";
                 }
-                if (String.valueOf(halls.get(i).getRooms().get(j).getCleanStatus()) == "0") { // if room is clean
+                if ("0".equals(String.valueOf(halls.get(i).getRooms().get(j).getCleanStatus()))) { // if room is clean
                     cleaningStatus = "Clean";
-                } else if (String.valueOf(halls.get(i).getRooms().get(j).getCleanStatus()) == "1") { // if room is dirty
+                } else if ("1".equals(String.valueOf(halls.get(i).getRooms().get(j).getCleanStatus()))) { // if room is dirty
                     cleaningStatus = "Dirty";
                 } else { // room is offline
                     cleaningStatus = "Offline";

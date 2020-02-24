@@ -27,38 +27,43 @@ public class ManagementSystem extends javax.swing.JFrame {
      * Creates new form ManagementSystem
      */
     private UweAccommodationSystem accommodationSystem = UweAccommodationSystem.getInstance();
+    private ListSelectionListener listener = new ListSelectionListener() {
+        @Override
+        public void valueChanged(ListSelectionEvent event) {
+            if (tblDisplayData.getSelectedRow() > -1) {
+                // print first column value from selected row
+                txtHallNo.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 0).toString());
+                txtHallName.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 1).toString());
+                txtRoomNo.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 2).toString());
+                txtLeaseNo.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString());
+                txtStudentID.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 4).toString());
+                txtStudentName.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 5).toString());
+                ddCleaningStatus.setSelectedItem(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString());
+                txtLeaseStart.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 8).toString());
+
+            }
+
+            if (tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString() != "") {
+                btnModifyCreateLease.setText("Modify Lease");
+            } else {
+                btnModifyCreateLease.setText("Create Lease");
+            }
+        }
+    };
 
     public ManagementSystem() {
         initComponents();
         setVisibility();
-        tblDisplayData.setModel(accommodationSystem.retrieveData());
-        String[] occupancyStatuses = {"Occupied", "Unoccupied"};
-        String[] cleaningStatuses = {"Dirty", "Clean", "Offline"};
-        ddCleaningStatus.setModel(new DefaultComboBoxModel(cleaningStatuses));
-        tblDisplayData.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent event) {
-                if (tblDisplayData.getSelectedRow() > -1) {
-                    // print first column value from selected row
-                    txtHallNo.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 0).toString());
-                    txtHallName.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 1).toString());
-                    txtRoomNo.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 2).toString());
-                    txtLeaseNo.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString());
-                    txtStudentID.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 4).toString());
-                    txtStudentName.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 5).toString());
-                    ddCleaningStatus.setSelectedItem(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString());
-                    txtLeaseStart.setText(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 8).toString());
+        refreshData();
 
-                }
+    }
 
-                if (tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString() != "") {
-                    btnModifyCreateLease.setText("Modify Lease");
-                } else {
-                    btnModifyCreateLease.setText("Create Lease");
-                }
-            }
-        });
-
+    public void refreshData() {
+        tblDisplayData.getSelectionModel().removeListSelectionListener(listener); // remove any listeners before refresh due to weird out of bounds bug
+        tblDisplayData.setModel(accommodationSystem.retrieveData()); // retrieve data from accommodation singleton
+        String[] cleaningStatuses = {"Dirty", "Clean", "Offline"}; // set cleaning statuses labels for dropdown
+        ddCleaningStatus.setModel(new DefaultComboBoxModel(cleaningStatuses)); // set dropdown cleaning status labels
+        tblDisplayData.getSelectionModel().addListSelectionListener(listener); // re - add change listener
     }
 
     /**
@@ -147,8 +152,18 @@ public class ManagementSystem extends javax.swing.JFrame {
         });
 
         btnDeleteLease.setText("Delete Lease");
+        btnDeleteLease.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteLeaseActionPerformed(evt);
+            }
+        });
 
         btnSetCleaningStatus.setText("Set Cleaning Status");
+        btnSetCleaningStatus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSetCleaningStatusActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -180,9 +195,9 @@ public class ManagementSystem extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(btnModifyCreateLease, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnDeleteLease, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btnSetCleaningStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnDeleteLease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnSetCleaningStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 278, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(141, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1157, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 8, Short.MAX_VALUE))
@@ -197,29 +212,29 @@ public class ManagementSystem extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtLeaseNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel7))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(txtHallName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addComponent(btnModifyCreateLease, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(btnDeleteLease, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtLeaseNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtStudentID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtHallName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtStudentName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnModifyCreateLease, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnDeleteLease, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel10))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtHallNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(ddCleaningStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -231,7 +246,9 @@ public class ManagementSystem extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtRoomNo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtLeaseStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(btnSetCleaningStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSetCleaningStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
 
@@ -248,7 +265,7 @@ public class ManagementSystem extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(14, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -267,15 +284,16 @@ public class ManagementSystem extends javax.swing.JFrame {
         if (tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString() == "") { // If creating new lease
             boolean leaseExists = false;
             boolean studentExists = false;
+            String leaseID = txtLeaseNo.getText();
             for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
                 for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for every room in this hall
                     if (accommodationSystem.halls.get(i).getRooms().get(j).getLease() != null) {
                         String leaseNo = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // get lease no
                         String studentID = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // get student ID
-                        if (leaseNo.equals(txtLeaseNo.getText())) { // ensure lease does not exist with entered lease number
+                        if (leaseNo.equals(leaseID)) { // ensure lease does not exist with entered lease number
                             leaseExists = true;
                         }
-                        if (studentID.equals(txtStudentID.getText())) { // ensure student does not exist with entered student number
+                        if (studentID.equals(leaseID)) { // ensure student does not exist with entered student number
                             studentExists = true;
                         }
                     }
@@ -289,6 +307,8 @@ public class ManagementSystem extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
             } else if ("".equals(txtStudentID.getText())) {
                 JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
+            } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && !"Offline".equals(ddCleaningStatus.getSelectedItem().toString())) {
+                JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
             } else { // if all is okay
                 try {
                     Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
@@ -296,20 +316,112 @@ public class ManagementSystem extends javax.swing.JFrame {
                     Lease leaseToAdd = new Lease(startDateToAdd, Integer.parseInt(txtLeaseNo.getText()), studentToAdd);
                     for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
                         for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
-                            if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if room that was selected
+                            if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
                                 accommodationSystem.halls.get(i).getRooms().get(j).addLease(leaseToAdd);
-                                tblDisplayData.setModel(accommodationSystem.retrieveData());
+                                if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean by superuser or unchanged
+                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
+                                } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty by superuser
+                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
+                                } else { // if room is set to offline by superuser
+                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                                }
+
                             }
                         }
                     }
+                    refreshData();
                 } catch (Exception e) {
                     JOptionPane.showMessageDialog(null, "The system threw an error - did you enter a valid integer for student number and lease no? Error message: " + e.getMessage());
                 }
             }
         } else { // if modifying lease
-
+            boolean leaseExists = false;
+            boolean studentExists = false;
+            String modifiedLeaseNumber = txtLeaseNo.getText();
+            String originalLeaseNumber = tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString();
+            String modifiedStudentID = txtStudentID.getText();
+            String originalStudentID = tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 4).toString();
+            for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for every room in this hall
+                    if (accommodationSystem.halls.get(i).getRooms().get(j).getLease() != null) {
+                        String leaseNo = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // get lease no
+                        String studentID = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // get student ID
+                        if (leaseNo.equals(modifiedLeaseNumber) && !modifiedLeaseNumber.equals(originalLeaseNumber)) { // ensure lease does not exist with entered lease number IF the lease number has been changed
+                            leaseExists = true;
+                        }
+                        if (studentID.equals(modifiedStudentID) && !modifiedStudentID.equals(originalStudentID)) { // ensure student does not exist with entered student number IF the student ID has been changed
+                            studentExists = true;
+                        }
+                    }
+                }
+            }
+            if (leaseExists) { // if lease number exists
+                JOptionPane.showMessageDialog(null, "You have entered a lease number that already exists - please enter a new lease number.");
+            } else if ("".equals(txtLeaseNo.getText())) { // If user has not entered a lease number
+                JOptionPane.showMessageDialog(null, "You have not entered a lease number - please enter a lease number.");
+            } else if (studentExists) { // If user has entered a student id that already exists
+                JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
+            } else if ("".equals(txtStudentID.getText())) {
+                JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
+            } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && !"Offline".equals(ddCleaningStatus.getSelectedItem().toString())) { // If not clean AND superuser is not setting it to be clean
+                JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
+            } else { // if all is okay
+                try {
+                    Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
+                    String startDateToAdd = txtLeaseStart.getText();
+                    Lease leaseToAdd = new Lease(startDateToAdd, Integer.parseInt(txtLeaseNo.getText()), studentToAdd);
+                    for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                        for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                            if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                                accommodationSystem.halls.get(i).getRooms().get(j).addLease(leaseToAdd);
+                                if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean by superuser or unchanged
+                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
+                                } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty by superuser
+                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
+                                } else { // if room is set to offline by superuser
+                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                                }
+                            }
+                        }
+                    }
+                    refreshData();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "The system threw an error - did you enter a valid integer for student number and lease no? Error message: " + e.getMessage());
+                }
+            }
         }
     }//GEN-LAST:event_btnModifyCreateLeaseActionPerformed
+
+    private void btnDeleteLeaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLeaseActionPerformed
+        // TODO add your handling code here:
+        for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+            for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                    accommodationSystem.halls.get(i).getRooms().get(j).addLease(null);
+                }
+            }
+        }
+        refreshData();
+    }//GEN-LAST:event_btnDeleteLeaseActionPerformed
+
+    private void btnSetCleaningStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetCleaningStatusActionPerformed
+        // TODO add your handling code here:
+        for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+            for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                    if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean
+                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
+                    } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty 
+                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
+                    } else { // if room is set to offline 
+                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                    }
+                }
+            }
+        }
+
+        refreshData();
+    }//GEN-LAST:event_btnSetCleaningStatusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -359,15 +471,25 @@ public class ManagementSystem extends javax.swing.JFrame {
                 txtStudentID.setEnabled(false);
                 txtStudentName.setEnabled(false);
                 txtLeaseStart.setEnabled(false);
+                txtLeaseNo.setEnabled(false);
+                btnModifyCreateLease.setEnabled(false);
+                btnDeleteLease.setEnabled(false);
                 break;
 
             case 1:
                 ddCleaningStatus.setEnabled(false);
+                btnSetCleaningStatus.setEnabled(false);
+                txtHallName.setEnabled(false);
+                txtHallNo.setEnabled(false);
+                txtRoomNo.setEnabled(false);
                 break;
 
             case 2:
+                txtHallName.setEnabled(false);
+                txtHallNo.setEnabled(false);
+                txtRoomNo.setEnabled(false);
                 break;
-            // superuser has full permissions so nothing needs disabling as all is enabled by default
+            // superuser has full permissions so nothing needs disabling except things that never change
         }
     }
 

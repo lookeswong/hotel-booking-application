@@ -7,7 +7,7 @@ package oosd;
 
 import java.util.ArrayList;
 import java.util.Date;
-
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -44,7 +44,7 @@ public class UweAccommodationSystem {
 
     private UweAccommodationSystem() {
         createTestData();
-//        retrieveData();
+        retrieveData();
     }
 
     public void createTestData() {
@@ -56,8 +56,8 @@ public class UweAccommodationSystem {
         Student studentD = new Student("Emily", 3);
 
         // Create Start Dates
-        Date dateA = new Date(2020, 0, 1); // 0 = January? 11 = December? Odd implementation!
-        Date dateB = new Date(2020, 1, 1);
+        String dateA = "January 1st 2020"; 
+        String dateB = "February 1st 2020"; 
 
         // Create New Leases
         Lease leaseA = new Lease(dateA, 0, studentA);
@@ -97,36 +97,57 @@ public class UweAccommodationSystem {
 
     }
 
-//    public void retrieveData() {
-//        int hallNo;
-//        String hallName;
-//        int roomNo;
-//        int leaseNo;
-//        int studentID;
-//        String studentName;
-//        String occupancyStatus;
-//        int cleaningStatus;
-//        Date leaseStart;
-//        
-//        for (int i = 0; i < halls.size(); i++) { // for each hall
-//            hallNo = halls.get(i).getHallNo(); // set hall number
-//            hallName = halls.get(i).getHallName(); // set hall name
-//            for (int j = 0; j < halls.get(i).getRooms().size(); j++){ // for every room in this hall
-//                roomNo = halls.get(i).getRooms().get(j).getRoomNo(); // set room number
-//                leaseNo = halls.get(i).getRooms().get(j).getLease().getLeaseNo(); // set lease no
-//                studentID = halls.get(i).getRooms().get(j).getLease().getStudent().getID(); // set student ID
-//                studentName = halls.get(i).getRooms().get(j).getLease().getStudent().getName(); // set student name
-//                if(halls.get(i).getRooms().get(j).getLease() == null){ // set occupancy status (automatically set to null if lease is expired)
-//                    occupancyStatus = "Unoccupied";
-//                } else {
-//                    occupancyStatus = "Occupied";
-//                }
-//                cleaningStatus = halls.get(i).getRooms().get(j).getCleanStatus(); // set cleaning status
-//                leaseStart = halls.get(i).getRooms().get(j).getLease().getStartDate(); // set lease start
-//                System.out.println(hallNo + hallName + roomNo + leaseNo + studentID + studentName + cleaningStatus + leaseStart);
-//            }
-//        }
-//    }
+    public DefaultTableModel retrieveData() {
+        String hallNo = "";
+        String hallName = "";
+        String roomNo = "";
+        String leaseNo = "";
+        String studentID = "";
+        String studentName = "";
+        String occupancyStatus = "";
+        String cleaningStatus = "";
+        String leaseStart = "";
+        Object columnNames[] = {"Hall No", "Hall Name", "Room No", "Lease No", "Student ID", "Student Name", "Cleaning Status", "Occupancy Status", "Lease Start"};
+        DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) { // Ensure generated table model is not editable
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        for (int i = 0; i < halls.size(); i++) { // for each hall
+            hallNo = String.valueOf(halls.get(i).getHallNo()); // set hall number
+            hallName = halls.get(i).getHallName(); // set hall name
+            for (int j = 0; j < halls.get(i).getRooms().size(); j++) { // for every room in this hall
+                roomNo = String.valueOf(halls.get(i).getRooms().get(j).getRoomNo()); // set room number
+                if (halls.get(i).getRooms().get(j).getLease() != null) {
+                    leaseNo = String.valueOf(halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // set lease no
+                    studentID = String.valueOf(halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // set student ID
+                    studentName = halls.get(i).getRooms().get(j).getLease().getStudent().getName(); // set student name
+                    leaseStart = String.valueOf(halls.get(i).getRooms().get(j).getLease().getStartDate()); // set lease start
+                    occupancyStatus = "Occupied";// set occupancy status (automatically set to null if lease is expired)
+                } else {
+                    occupancyStatus = "Unoccupied";
+                    leaseNo = "";
+                    studentID = "";
+                    studentName = "";
+                    leaseStart = "";
+                }
+                if (String.valueOf(halls.get(i).getRooms().get(j).getCleanStatus()) == "0") { // if room is clean
+                    cleaningStatus = "Clean";
+                } else if (String.valueOf(halls.get(i).getRooms().get(j).getCleanStatus()) == "1") { // if room is dirty
+                    cleaningStatus = "Dirty";
+                } else { // room is offline
+                    cleaningStatus = "Offline";
+                }
+                System.out.println(hallNo + " " + hallName + " " + roomNo + " " + leaseNo + " " + studentID + " " + studentName + " " + cleaningStatus + " " + occupancyStatus + " " + leaseStart);
+                Object[] rowData = {hallNo, hallName, roomNo, leaseNo, studentID, studentName, cleaningStatus, occupancyStatus, leaseStart};
+                tableModel.addRow(rowData);
+
+            }
+        }
+        return tableModel;
+    }
 
     public static UweAccommodationSystem getInstance() {
         if (instance == null) {

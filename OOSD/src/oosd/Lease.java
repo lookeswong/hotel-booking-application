@@ -12,7 +12,7 @@ import java.util.Date;
  * @author Joe Murnane
  */
 public class Lease {
-    private Date startDate;
+    private String startDate;
     private Student student;
     private int leaseNo;
     
@@ -22,7 +22,7 @@ public class Lease {
         startDate = null;
     }
     
-    public Lease(Date startDate, int leaseNo, Student student) {
+    public Lease(String startDate, int leaseNo, Student student) {
         this.startDate = startDate;
         this.leaseNo = leaseNo;
         this.student = student;
@@ -37,7 +37,7 @@ public class Lease {
     //
     // }
 
-    public Date getStartDate(){
+    public String getStartDate(){
         return this.startDate;
     }
     
@@ -49,7 +49,7 @@ public class Lease {
         this.student = student;
     }
     
-    public void setStartDate(Date startDate){
+    public void setStartDate(String startDate){
         this.startDate = startDate;
     }
     

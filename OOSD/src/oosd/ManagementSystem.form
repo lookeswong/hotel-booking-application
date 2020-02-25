@@ -63,20 +63,20 @@
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
                       <Component id="txtHallNo" max="32767" attributes="0"/>
                       <Component id="txtHallName" alignment="0" max="32767" attributes="0"/>
-                      <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel4" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblLeaseNo" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblHallName" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblHallNo" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblRoomNo" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="txtLeaseNo" alignment="0" pref="327" max="32767" attributes="0"/>
                       <Component id="txtRoomNo" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Component id="txtStudentID" max="32767" attributes="0"/>
-                      <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblLeaseStart" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblCleaningStatus" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblStudentName" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblStudentID" min="-2" max="-2" attributes="0"/>
                       <Component id="txtStudentName" alignment="0" max="32767" attributes="0"/>
                       <Component id="ddCleaningStatus" alignment="0" max="32767" attributes="0"/>
                       <Component id="txtLeaseStart" alignment="0" min="-2" pref="322" max="-2" attributes="0"/>
@@ -105,8 +105,8 @@
                   <Component id="jScrollPane1" min="-2" pref="243" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblStudentID" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblLeaseNo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
@@ -117,8 +117,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblHallName" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblStudentName" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -135,8 +135,8 @@
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblHallNo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblCleaningStatus" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -145,8 +145,8 @@
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel5" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLabel9" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblRoomNo" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="lblLeaseStart" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -221,43 +221,43 @@
             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
           </AuxValues>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel2">
+        <Component class="javax.swing.JLabel" name="lblLeaseNo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lease Number:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel3">
+        <Component class="javax.swing.JLabel" name="lblHallName">
           <Properties>
             <Property name="text" type="java.lang.String" value="Hall Name:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel4">
+        <Component class="javax.swing.JLabel" name="lblHallNo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Hall Number:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel5">
+        <Component class="javax.swing.JLabel" name="lblRoomNo">
           <Properties>
             <Property name="text" type="java.lang.String" value="Room Number"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel6">
+        <Component class="javax.swing.JLabel" name="lblStudentID">
           <Properties>
             <Property name="text" type="java.lang.String" value="Student ID:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel7">
+        <Component class="javax.swing.JLabel" name="lblStudentName">
           <Properties>
             <Property name="text" type="java.lang.String" value="Student Name:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel9">
+        <Component class="javax.swing.JLabel" name="lblLeaseStart">
           <Properties>
             <Property name="text" type="java.lang.String" value="Lease Start Date:"/>
             <Property name="toolTipText" type="java.lang.String" value=""/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="jLabel10">
+        <Component class="javax.swing.JLabel" name="lblCleaningStatus">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cleaning Status:"/>
           </Properties>

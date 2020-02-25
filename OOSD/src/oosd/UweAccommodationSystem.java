@@ -6,7 +6,7 @@
 package oosd;
 
 import java.util.ArrayList;
-import java.util.Date;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +30,7 @@ public class UweAccommodationSystem {
             setPermissions(2);
             System.out.println("Logging in as Superuser");
         } else {
+            JOptionPane.showMessageDialog(null, "You have entered an invalid username and password");
             throw new InvalidLoginException("User login was not recognised!");
         }
     }
@@ -50,34 +51,47 @@ public class UweAccommodationSystem {
     public void createTestData() {
         //Create Test Students
         // Create Test Students
-        Student studentA = new Student("Jason", 0);
-        Student studentB = new Student("Kun Wei", 1);
-        Student studentC = new Student("Elise", 2);
-        Student studentD = new Student("Emily", 3);
-        Student studentE = new Student("James", 3);
+        Student studentA = new Student("Jason", 1901);
+        Student studentB = new Student("Kun Wei", 1902);
+        Student studentC = new Student("Elise", 1903);
+        Student studentD = new Student("Emily", 1904);
+        Student studentE = new Student("James", 1905);
+        Student studentF = new Student("Lucas", 1906);
+        Student studentG = new Student("Joe", 1907);
+        Student studentH = new Student("Mike", 1908);
 
         // Create Start Dates
         String dateA = "January 1st 2020"; 
         String dateB = "February 1st 2020"; 
 
         // Create New Leases
-        Lease leaseA = new Lease(dateA, 0, studentA);
-        Lease leaseB = new Lease(dateB, 1, studentB);
-        Lease leaseC = new Lease(dateA, 2, studentC);
-        Lease leaseD = new Lease(dateA, 3, studentD);
-        Lease leaseE = new Lease(dateA, 3, studentE);
+        Lease leaseA = new Lease(dateA, 1001, studentA);
+        Lease leaseB = new Lease(dateB, 1002, studentB);
+        Lease leaseC = new Lease(dateA, 1003, studentC);
+        Lease leaseD = new Lease(dateA, 1004, studentD);
+        Lease leaseE = new Lease(dateA, 1005, studentE);
+        Lease leaseF = new Lease(dateB, 1006, studentF);
+        Lease leaseG = new Lease(dateB, 1007, studentG);
+        Lease leaseH = new Lease(dateA, 1008, studentH);
+
 
         // Create new Rooms
-        Room roomA = new Room(0, leaseA, 0, 99.99, "");
-        Room roomB = new Room(1, leaseB, 0, 99.99, "");
-        Room roomC = new Room(2, leaseC, 0, 99.99, "");
-        Room roomD = new Room(3, leaseD, 0, 99.99, "");
-        Room roomE = new Room(4, null, 0, 99.99, ""); // Empty Room
-        Room roomF = new Room(5, leaseE, 0, 99.99, "");
+        Room roomA = new Room(101, leaseA, 0, 99.99, "");
+        Room roomB = new Room(102, leaseB, 0, 99.99, "");
+        Room roomC = new Room(103, leaseC, 0, 99.99, "");
+        Room roomD = new Room(104, leaseD, 0, 99.99, "");
+        Room roomE = new Room(105, null, 2, 99.99, ""); // Empty Room
+        Room roomF = new Room(106, leaseE, 0, 99.99, "");
+        Room roomG = new Room(107, leaseF, 0, 99.99, "");
+        Room roomH = new Room(108, leaseG, 0, 99.99, "");
+        Room roomI = new Room(109, leaseH, 0, 99.99, "");
+        Room roomJ = new Room(110, null, 2, 99.99, ""); // Empty Room
+        Room roomK = new Room(111, null, 1, 99.99, ""); // Empty Room
 
         // Create New Halls
         ArrayList<Room> hallARooms = new ArrayList<>();
         ArrayList<Room> hallBRooms = new ArrayList<>();
+        ArrayList<Room> hallCRooms = new ArrayList<>();
 
         hallARooms.add(roomA);
         hallARooms.add(roomB);
@@ -86,18 +100,26 @@ public class UweAccommodationSystem {
         hallBRooms.add(roomD);
         hallBRooms.add(roomE);
         hallBRooms.add(roomF);
+        hallBRooms.add(roomK);
+        
+        hallCRooms.add(roomG);
+        hallCRooms.add(roomH);
+        hallCRooms.add(roomI);
+        hallCRooms.add(roomJ);
 
-        Hall hallA = new Hall(hallARooms, 0, "", "", "Hall A");
+        Hall hallA = new Hall(hallARooms, 1, "", "", "Hall A");
         halls.add(hallA);
-        Hall hallB = new Hall(hallBRooms, 1, "", "", "Hall B");
+        Hall hallB = new Hall(hallBRooms, 2, "", "", "Hall B");
         halls.add(hallB);
+        Hall hallC = new Hall(hallCRooms, 3, "", "", "Hall C");
+        halls.add(hallC);
 
-        System.out.println("Room No. 1 OBJECT:" + hallA.getRoom(1));
-        System.out.println("Room No. 1 LEASE OBJECT: " + hallA.getRoom(1).getLease());
-        System.out.println("Room No. 1 LEASE STUDENT OBJECT:" + hallA.getRoom(1).getLease().getStudent());
-        System.out.println("Room No. 1 LEASE STUDENT NAME:" + hallA.getRoom(1).getLease().getStudent().getName());
-
-        System.out.println("Rooms in Hall A:" + hallA.getRoom(0) + hallA.getRoom(1) + hallA.getRoom(2));
+//        System.out.println("Room No. 1 OBJECT:" + hallA.getRoom(1));
+//        System.out.println("Room No. 1 LEASE OBJECT: " + hallA.getRoom(1).getLease());
+//        System.out.println("Room No. 1 LEASE STUDENT OBJECT:" + hallA.getRoom(1).getLease().getStudent());
+//        System.out.println("Room No. 1 LEASE STUDENT NAME:" + hallA.getRoom(1).getLease().getStudent().getName());
+//
+//        System.out.println("Rooms in Hall A:" + hallA.getRoom(0) + hallA.getRoom(1) + hallA.getRoom(2));
 
     }
 
@@ -144,7 +166,7 @@ public class UweAccommodationSystem {
                 } else { // room is offline
                     cleaningStatus = "Offline";
                 }
-                System.out.println(hallNo + " " + hallName + " " + roomNo + " " + leaseNo + " " + studentID + " " + studentName + " " + cleaningStatus + " " + occupancyStatus + " " + leaseStart);
+//                System.out.println(hallNo + " " + hallName + " " + roomNo + " " + leaseNo + " " + studentID + " " + studentName + " " + cleaningStatus + " " + occupancyStatus + " " + leaseStart);
                 Object[] rowData = {hallNo, hallName, roomNo, leaseNo, studentID, studentName, cleaningStatus, occupancyStatus, leaseStart};
                 tableModel.addRow(rowData);
 

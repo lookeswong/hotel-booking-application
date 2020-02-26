@@ -33,10 +33,6 @@ public class Lease {
         return this.student;
     }
     
-    // public Room getRoom() How to implement this? are we storing each room with lease and forgoty to add to uml ddiagram? or do I have to go back up to find the room this lease is associated with?
-    //
-    // }
-
     public String getStartDate(){
         return this.startDate;
     }

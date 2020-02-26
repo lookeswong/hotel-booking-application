@@ -49,7 +49,7 @@ public class Room {
     }
     
     public void removeLease(){
-        this.lease = null; // better way to do this?
+        this.lease = null;
     }
     
     public void addLease(Lease lease){

@@ -8,7 +8,7 @@ package oosd;
 
 /**
  *
- * @author j2-murnane
+ * @author Joe Murnane
  */
 public class InvalidLoginException extends Exception {
 

@@ -19,7 +19,7 @@ import javax.swing.table.TableModel;
 
 /**
  *
- * @author Lucas
+ * @author Lucas & Joe
  */
 public class ManagementSystem extends javax.swing.JFrame {
 
@@ -398,7 +398,7 @@ public class ManagementSystem extends javax.swing.JFrame {
         for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
             for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
                 if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
-                    accommodationSystem.halls.get(i).getRooms().get(j).addLease(null);
+                    accommodationSystem.halls.get(i).getRooms().get(j).removeLease();
                 }
             }
         }

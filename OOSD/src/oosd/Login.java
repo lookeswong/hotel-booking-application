@@ -7,7 +7,7 @@ package oosd;
 
 /**
  *
- * @author j2-murnane
+ * @author Joe and Lucas
  */
 public class Login extends javax.swing.JFrame {
 

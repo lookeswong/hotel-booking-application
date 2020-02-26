@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author j2-murnane
+ * @author Joe Murnane & Lucas
  */
 public class UweAccommodationSystem {
 
@@ -49,7 +49,6 @@ public class UweAccommodationSystem {
     }
 
     public void createTestData() {
-        //Create Test Students
         // Create Test Students
         Student studentA = new Student("Jason", 1901);
         Student studentB = new Student("Kun Wei", 1902);
@@ -85,7 +84,7 @@ public class UweAccommodationSystem {
         Room roomG = new Room(107, leaseF, 0, 99.99, "");
         Room roomH = new Room(108, leaseG, 0, 99.99, "");
         Room roomI = new Room(109, leaseH, 0, 99.99, "");
-        Room roomJ = new Room(110, null, 2, 99.99, ""); // Empty Room
+        Room roomJ = new Room(110, null, 0, 99.99, ""); // Empty Room
         Room roomK = new Room(111, null, 1, 99.99, ""); // Empty Room
 
         // Create New Halls
@@ -113,13 +112,6 @@ public class UweAccommodationSystem {
         halls.add(hallB);
         Hall hallC = new Hall(hallCRooms, 3, "", "", "Hall C");
         halls.add(hallC);
-
-//        System.out.println("Room No. 1 OBJECT:" + hallA.getRoom(1));
-//        System.out.println("Room No. 1 LEASE OBJECT: " + hallA.getRoom(1).getLease());
-//        System.out.println("Room No. 1 LEASE STUDENT OBJECT:" + hallA.getRoom(1).getLease().getStudent());
-//        System.out.println("Room No. 1 LEASE STUDENT NAME:" + hallA.getRoom(1).getLease().getStudent().getName());
-//
-//        System.out.println("Rooms in Hall A:" + hallA.getRoom(0) + hallA.getRoom(1) + hallA.getRoom(2));
 
     }
 
@@ -166,7 +158,6 @@ public class UweAccommodationSystem {
                 } else { // room is offline
                     cleaningStatus = "Offline";
                 }
-//                System.out.println(hallNo + " " + hallName + " " + roomNo + " " + leaseNo + " " + studentID + " " + studentName + " " + cleaningStatus + " " + occupancyStatus + " " + leaseStart);
                 Object[] rowData = {hallNo, hallName, roomNo, leaseNo, studentID, studentName, cleaningStatus, occupancyStatus, leaseStart};
                 tableModel.addRow(rowData);
 

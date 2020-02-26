@@ -36,6 +36,7 @@ public class Hall {
         return rooms;
     }
     
+    /* Author Joe & Lucas */
     public Room getRoom(int roomNo) {
         Room returnedRoom = null;
         for (int i=0; i<rooms.size(); i++) {

@@ -344,8 +344,8 @@ public class ManagementSystem extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
                 } else if ("".equals(txtStudentID.getText())) {
                     JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
-                } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && "Offline".equals(ddCleaningStatus.getSelectedItem().toString())) {
-                    JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
+                } else if ("Offline".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString())) {
+                    JOptionPane.showMessageDialog(null, "This room is offline and cannot be given a lease.");
                 } else { // if all is okay
                     try {
                         Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
@@ -400,8 +400,8 @@ public class ManagementSystem extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
                 } else if ("".equals(txtStudentID.getText())) {
                     JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
-                } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && !"Offline".equals(ddCleaningStatus.getSelectedItem().toString())) { // If not clean AND superuser is not setting it to be clean
-                    JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
+                } else if ("Offline".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // If offline AND superuser is not setting it to be clean
+                    JOptionPane.showMessageDialog(null, "This room offline and cannot be given a lease.");
                 } else { // if all is okay
                     try {
                         Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
@@ -433,7 +433,7 @@ public class ManagementSystem extends javax.swing.JFrame {
     private void btnDeleteLeaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLeaseActionPerformed
         // TODO add your handling code here:
         if (tblDisplayData.getSelectedRowCount() == 0) {
-            JOptionPane.showMessageDialog(null, "You have not select a room");
+            JOptionPane.showMessageDialog(null, "You have not selected a room");
         } else {
             for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
                 for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room

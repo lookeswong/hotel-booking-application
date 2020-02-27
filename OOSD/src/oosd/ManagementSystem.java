@@ -449,7 +449,7 @@ public class ManagementSystem extends javax.swing.JFrame {
     private void btnSetCleaningStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetCleaningStatusActionPerformed
         // TODO add your handling code here:
         if (tblDisplayData.getSelectedRowCount() == 0) {
-            JOptionPane.showMessageDialog(null, "You have not select a room");
+            JOptionPane.showMessageDialog(null, "You have not selected a room");
         } else {
             for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
                 for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room

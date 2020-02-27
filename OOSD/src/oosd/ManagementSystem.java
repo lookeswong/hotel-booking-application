@@ -315,7 +315,7 @@ public class ManagementSystem extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         if (tblDisplayData.getSelectedRowCount() == 0) {
-            JOptionPane.showMessageDialog(null, "You have not select a room");
+            JOptionPane.showMessageDialog(null, "You have not selected a room");
         } else {
             if (tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString() == "") { // If creating new lease
                 boolean leaseExists = false;

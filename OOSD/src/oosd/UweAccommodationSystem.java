@@ -60,8 +60,8 @@ public class UweAccommodationSystem {
         Student studentH = new Student("Mike", 1908);
 
         // Create Start Dates
-        String dateA = "January 1st 2020"; 
-        String dateB = "February 1st 2020"; 
+        String dateA = "January 1st 2020";
+        String dateB = "February 1st 2020";
 
         // Create New Leases
         Lease leaseA = new Lease(dateA, 1001, studentA);
@@ -73,17 +73,16 @@ public class UweAccommodationSystem {
         Lease leaseG = new Lease(dateB, 1007, studentG);
         Lease leaseH = new Lease(dateA, 1008, studentH);
 
-
         // Create new Rooms
-        Room roomA = new Room(101, leaseA, 0, 99.99, "");
-        Room roomB = new Room(102, leaseB, 0, 99.99, "");
-        Room roomC = new Room(103, leaseC, 0, 99.99, "");
-        Room roomD = new Room(104, leaseD, 0, 99.99, "");
-        Room roomE = new Room(105, null, 2, 99.99, ""); // Empty Room
-        Room roomF = new Room(106, leaseE, 0, 99.99, "");
-        Room roomG = new Room(107, leaseF, 0, 99.99, "");
+        Room roomA = new Room(101, leaseA, 0, 79.99, "");
+        Room roomB = new Room(102, leaseB, 0, 299.99, "");
+        Room roomC = new Room(103, leaseC, 0, 199.99, "");
+        Room roomD = new Room(104, leaseD, 0, 299.99, "");
+        Room roomE = new Room(105, null, 2, 129.99, ""); // Empty Room
+        Room roomF = new Room(106, leaseE, 0, 49.99, "");
+        Room roomG = new Room(107, leaseF, 0, 399.99, "");
         Room roomH = new Room(108, leaseG, 0, 99.99, "");
-        Room roomI = new Room(109, leaseH, 0, 99.99, "");
+        Room roomI = new Room(109, leaseH, 0, 79.99, "");
         Room roomJ = new Room(110, null, 0, 99.99, ""); // Empty Room
         Room roomK = new Room(111, null, 1, 99.99, ""); // Empty Room
 
@@ -100,17 +99,17 @@ public class UweAccommodationSystem {
         hallBRooms.add(roomE);
         hallBRooms.add(roomF);
         hallBRooms.add(roomK);
-        
+
         hallCRooms.add(roomG);
         hallCRooms.add(roomH);
         hallCRooms.add(roomI);
         hallCRooms.add(roomJ);
 
-        Hall hallA = new Hall(hallARooms, 1, "", "", "Hall A");
+        Hall hallA = new Hall(hallARooms, 1, "1 UWE Drive", "01202999999", "Hall A");
         halls.add(hallA);
-        Hall hallB = new Hall(hallBRooms, 2, "", "", "Hall B");
+        Hall hallB = new Hall(hallBRooms, 2, "2 UWE Road", "01202888888", "Hall B");
         halls.add(hallB);
-        Hall hallC = new Hall(hallCRooms, 3, "", "", "Hall C");
+        Hall hallC = new Hall(hallCRooms, 3, "3 UWE Court", "01202345321", "Hall C");
         halls.add(hallC);
 
     }
@@ -125,7 +124,10 @@ public class UweAccommodationSystem {
         String occupancyStatus = "";
         String cleaningStatus = "";
         String leaseStart = "";
-        Object columnNames[] = {"Hall No", "Hall Name", "Room No", "Lease No", "Student ID", "Student Name", "Cleaning Status", "Occupancy Status", "Lease Start"};
+        String roomRent = "";
+        String hallAddress = "";
+        String hallPhoneNo = "";
+        Object columnNames[] = {"Hall No", "Hall Name", "Room No", "Lease No", "Student ID", "Student Name", "Cleaning Status", "Occupancy Status", "Lease Start", "Room Rent", "Hall Address", "Hall Phone No"};
         DefaultTableModel tableModel = new DefaultTableModel(columnNames, 0) { // Ensure generated table model is not editable
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -136,8 +138,11 @@ public class UweAccommodationSystem {
         for (int i = 0; i < halls.size(); i++) { // for each hall
             hallNo = String.valueOf(halls.get(i).getHallNo()); // set hall number
             hallName = halls.get(i).getHallName(); // set hall name
+            hallPhoneNo = halls.get(i).getPhoneNo();
+            hallAddress = halls.get(i).getHallAddress();
             for (int j = 0; j < halls.get(i).getRooms().size(); j++) { // for every room in this hall
                 roomNo = String.valueOf(halls.get(i).getRooms().get(j).getRoomNo()); // set room number
+                roomRent = String.valueOf(halls.get(i).getRooms().get(j).getRent());
                 if (halls.get(i).getRooms().get(j).getLease() != null) {
                     leaseNo = String.valueOf(halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // set lease no
                     studentID = String.valueOf(halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // set student ID
@@ -158,13 +163,25 @@ public class UweAccommodationSystem {
                 } else { // room is offline
                     cleaningStatus = "Offline";
                 }
-                Object[] rowData = {hallNo, hallName, roomNo, leaseNo, studentID, studentName, cleaningStatus, occupancyStatus, leaseStart};
+                Object[] rowData = {hallNo, hallName, roomNo, leaseNo, studentID, studentName, cleaningStatus, occupancyStatus, leaseStart, roomRent, hallAddress, hallPhoneNo};
                 tableModel.addRow(rowData);
 
             }
         }
         return tableModel;
     }
+
+    public int countRooms() {
+        int roomCount = 0;
+        for(int i = 0; i < halls.size(); i++) { // for each hall
+            for(int j = 0; j < halls.get(i).getRooms().size(); j++) { // for every room in this hall
+                roomCount++;
+            }
+        }
+        return roomCount;
+    }
+
+    
 
     public static UweAccommodationSystem getInstance() {
         if (instance == null) {

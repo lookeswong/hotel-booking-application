@@ -281,113 +281,118 @@ public class ManagementSystem extends javax.swing.JFrame {
 
     private void btnModifyCreateLeaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModifyCreateLeaseActionPerformed
         // TODO add your handling code here:
-        if (tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString() == "") { // If creating new lease
-            boolean leaseExists = false;
-            boolean studentExists = false;
-            String leaseID = txtLeaseNo.getText();
-            String studentNo = txtStudentID.getText();
-            for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
-                for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for every room in this hall
-                    if (accommodationSystem.halls.get(i).getRooms().get(j).getLease() != null) {
-                        String leaseNo = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // get lease no
-                        String studentID = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // get student ID
-                        if (leaseNo.equals(leaseID)) { // ensure lease does not exist with entered lease number
-                            leaseExists = true;
-                        }
-                        if (studentID.equals(studentNo)) { // ensure student does not exist with entered student number
-                            studentExists = true;
-                        }
-                    }
-                }
-            }
-            if (leaseExists) { // if lease number exists
-                JOptionPane.showMessageDialog(null, "You have entered a lease number that already exists - please enter a new lease number.");
-            } else if ("".equals(txtLeaseNo.getText())) { // If user has not entered a lease number
-                JOptionPane.showMessageDialog(null, "You have not entered a lease number - please enter a lease number.");
-            } else if (studentExists) { // If user has entered a student id that already exists
-                JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
-            } else if ("".equals(txtStudentID.getText())) {
-                JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
-            } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && "Offline".equals(ddCleaningStatus.getSelectedItem().toString())) {
-                JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
-            } else { // if all is okay
-                try {
-                    Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
-                    String startDateToAdd = txtLeaseStart.getText();
-                    Lease leaseToAdd = new Lease(startDateToAdd, Integer.parseInt(txtLeaseNo.getText()), studentToAdd);
-                    for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
-                        for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
-                            if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
-                                accommodationSystem.halls.get(i).getRooms().get(j).addLease(leaseToAdd);
-                                if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean by superuser or unchanged
-                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
-                                } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty by superuser
-                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
-                                } else { // if room is set to offline by superuser
-                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
-                                }
 
+        if (tblDisplayData.getSelectedRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "You have not select a room");
+        } else {
+            if (tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString() == "") { // If creating new lease
+                boolean leaseExists = false;
+                boolean studentExists = false;
+                String leaseID = txtLeaseNo.getText();
+                String studentNo = txtStudentID.getText();
+                for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                    for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for every room in this hall
+                        if (accommodationSystem.halls.get(i).getRooms().get(j).getLease() != null) {
+                            String leaseNo = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // get lease no
+                            String studentID = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // get student ID
+                            if (leaseNo.equals(leaseID)) { // ensure lease does not exist with entered lease number
+                                leaseExists = true;
+                            }
+                            if (studentID.equals(studentNo)) { // ensure student does not exist with entered student number
+                                studentExists = true;
                             }
                         }
                     }
-                    refreshData();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "The system threw an error - did you enter a valid integer for student number and lease no? Error message: " + e.getMessage());
                 }
-            }
-        } else { // if modifying lease
-            boolean leaseExists = false;
-            boolean studentExists = false;
-            String modifiedLeaseNumber = txtLeaseNo.getText();
-            String originalLeaseNumber = tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString();
-            String modifiedStudentID = txtStudentID.getText();
-            String originalStudentID = tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 4).toString();
-            for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
-                for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for every room in this hall
-                    if (accommodationSystem.halls.get(i).getRooms().get(j).getLease() != null) {
-                        String leaseNo = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // get lease no
-                        String studentID = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // get student ID
-                        if (leaseNo.equals(modifiedLeaseNumber) && !modifiedLeaseNumber.equals(originalLeaseNumber)) { // ensure lease does not exist with entered lease number IF the lease number has been changed
-                            leaseExists = true;
-                        }
-                        if (studentID.equals(modifiedStudentID) && !modifiedStudentID.equals(originalStudentID)) { // ensure student does not exist with entered student number IF the student ID has been changed
-                            studentExists = true;
-                        }
-                    }
-                }
-            }
-            if (leaseExists) { // if lease number exists
-                JOptionPane.showMessageDialog(null, "You have entered a lease number that already exists - please enter a new lease number.");
-            } else if ("".equals(txtLeaseNo.getText())) { // If user has not entered a lease number
-                JOptionPane.showMessageDialog(null, "You have not entered a lease number - please enter a lease number.");
-            } else if (studentExists) { // If user has entered a student id that already exists
-                JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
-            } else if ("".equals(txtStudentID.getText())) {
-                JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
-            } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && !"Offline".equals(ddCleaningStatus.getSelectedItem().toString())) { // If not clean AND superuser is not setting it to be clean
-                JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
-            } else { // if all is okay
-                try {
-                    Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
-                    String startDateToAdd = txtLeaseStart.getText();
-                    Lease leaseToAdd = new Lease(startDateToAdd, Integer.parseInt(txtLeaseNo.getText()), studentToAdd);
-                    for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
-                        for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
-                            if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
-                                accommodationSystem.halls.get(i).getRooms().get(j).addLease(leaseToAdd);
-                                if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean by superuser or unchanged
-                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
-                                } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty by superuser
-                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
-                                } else { // if room is set to offline by superuser
-                                    accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                if (leaseExists) { // if lease number exists
+                    JOptionPane.showMessageDialog(null, "You have entered a lease number that already exists - please enter a new lease number.");
+                } else if ("".equals(txtLeaseNo.getText())) { // If user has not entered a lease number
+                    JOptionPane.showMessageDialog(null, "You have not entered a lease number - please enter a lease number.");
+                } else if (studentExists) { // If user has entered a student id that already exists
+                    JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
+                } else if ("".equals(txtStudentID.getText())) {
+                    JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
+                } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && "Offline".equals(ddCleaningStatus.getSelectedItem().toString())) {
+                    JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
+                } else { // if all is okay
+                    try {
+                        Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
+                        String startDateToAdd = txtLeaseStart.getText();
+                        Lease leaseToAdd = new Lease(startDateToAdd, Integer.parseInt(txtLeaseNo.getText()), studentToAdd);
+                        for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                            for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                                if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                                    accommodationSystem.halls.get(i).getRooms().get(j).addLease(leaseToAdd);
+                                    if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean by superuser or unchanged
+                                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
+                                    } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty by superuser
+                                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
+                                    } else { // if room is set to offline by superuser
+                                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                                    }
+
                                 }
                             }
                         }
+                        refreshData();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "The system threw an error - did you enter a valid integer for student number and lease no? Error message: " + e.getMessage());
                     }
-                    refreshData();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(null, "The system threw an error - did you enter a valid integer for student number and lease no? Error message: " + e.getMessage());
+                }
+            } else { // if modifying lease
+                boolean leaseExists = false;
+                boolean studentExists = false;
+                String modifiedLeaseNumber = txtLeaseNo.getText();
+                String originalLeaseNumber = tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 3).toString();
+                String modifiedStudentID = txtStudentID.getText();
+                String originalStudentID = tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 4).toString();
+                for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                    for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for every room in this hall
+                        if (accommodationSystem.halls.get(i).getRooms().get(j).getLease() != null) {
+                            String leaseNo = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getLeaseNo()); // get lease no
+                            String studentID = String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getLease().getStudent().getID()); // get student ID
+                            if (leaseNo.equals(modifiedLeaseNumber) && !modifiedLeaseNumber.equals(originalLeaseNumber)) { // ensure lease does not exist with entered lease number IF the lease number has been changed
+                                leaseExists = true;
+                            }
+                            if (studentID.equals(modifiedStudentID) && !modifiedStudentID.equals(originalStudentID)) { // ensure student does not exist with entered student number IF the student ID has been changed
+                                studentExists = true;
+                            }
+                        }
+                    }
+                }
+                if (leaseExists) { // if lease number exists
+                    JOptionPane.showMessageDialog(null, "You have entered a lease number that already exists - please enter a new lease number.");
+                } else if ("".equals(txtLeaseNo.getText())) { // If user has not entered a lease number
+                    JOptionPane.showMessageDialog(null, "You have not entered a lease number - please enter a lease number.");
+                } else if (studentExists) { // If user has entered a student id that already exists
+                    JOptionPane.showMessageDialog(null, "You have entered a student number that already exists");
+                } else if ("".equals(txtStudentID.getText())) {
+                    JOptionPane.showMessageDialog(null, "You have not entered a student - please enter a student ID.");
+                } else if (!"Clean".equals(tblDisplayData.getValueAt(tblDisplayData.getSelectedRow(), 6).toString()) && !"Clean".equals(ddCleaningStatus.getSelectedItem().toString()) && !"Offline".equals(ddCleaningStatus.getSelectedItem().toString())) { // If not clean AND superuser is not setting it to be clean
+                    JOptionPane.showMessageDialog(null, "This room is not clean and cannot be given a lease.");
+                } else { // if all is okay
+                    try {
+                        Student studentToAdd = new Student(txtStudentName.getText(), Integer.parseInt(txtStudentID.getText()));
+                        String startDateToAdd = txtLeaseStart.getText();
+                        Lease leaseToAdd = new Lease(startDateToAdd, Integer.parseInt(txtLeaseNo.getText()), studentToAdd);
+                        for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                            for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                                if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                                    accommodationSystem.halls.get(i).getRooms().get(j).addLease(leaseToAdd);
+                                    if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean by superuser or unchanged
+                                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
+                                    } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty by superuser
+                                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
+                                    } else { // if room is set to offline by superuser
+                                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                                    }
+                                }
+                            }
+                        }
+                        refreshData();
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "The system threw an error - did you enter a valid integer for student number and lease no? Error message: " + e.getMessage());
+                    }
                 }
             }
         }
@@ -395,33 +400,41 @@ public class ManagementSystem extends javax.swing.JFrame {
 
     private void btnDeleteLeaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteLeaseActionPerformed
         // TODO add your handling code here:
-        for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
-            for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
-                if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
-                    accommodationSystem.halls.get(i).getRooms().get(j).removeLease();
+        if (tblDisplayData.getSelectedRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "You have not select a room");
+        } else {
+            for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                    if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                        accommodationSystem.halls.get(i).getRooms().get(j).removeLease();
+                    }
                 }
             }
+            refreshData();
         }
-        refreshData();
     }//GEN-LAST:event_btnDeleteLeaseActionPerformed
 
     private void btnSetCleaningStatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSetCleaningStatusActionPerformed
         // TODO add your handling code here:
-        for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
-            for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
-                if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
-                    if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean
-                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
-                    } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty 
-                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
-                    } else { // if room is set to offline 
-                        accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+        if (tblDisplayData.getSelectedRowCount() == 0) {
+            JOptionPane.showMessageDialog(null, "You have not select a room");
+        } else {
+            for (int i = 0; i < accommodationSystem.halls.size(); i++) { // for each hall
+                for (int j = 0; j < accommodationSystem.halls.get(i).getRooms().size(); j++) { // for each room
+                    if (String.valueOf(accommodationSystem.halls.get(i).getRooms().get(j).getRoomNo()).equals(txtRoomNo.getText())) { // if this is the room that was selected
+                        if ("Clean".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to clean
+                            accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(0);
+                        } else if ("Dirty".equals(ddCleaningStatus.getSelectedItem().toString())) { // if room is set to dirty 
+                            accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(1);
+                        } else { // if room is set to offline 
+                            accommodationSystem.halls.get(i).getRooms().get(j).setCleanStatus(2);
+                        }
                     }
                 }
             }
-        }
 
-        refreshData();
+            refreshData();
+        }
     }//GEN-LAST:event_btnSetCleaningStatusActionPerformed
 
     /**
